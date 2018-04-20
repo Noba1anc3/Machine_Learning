@@ -1,9 +1,11 @@
 # GaitGAN
-GaitGAN based on Pytorch
+Pytorch implementation of "GaitGAN: Invariant Gait Feature Extraction Using Generative Adversarial Networks", its unfinished yet.
 
-This is a implementation of "GaitGAN: Invariant Gait Feature Extraction Using Generative Adversarial Networks" in Pytorch, its unfinished yet.
+The network framework is based on DCGAN, you can see the code of DCGAN in pytorch in the webside: https://github.com/pytorch/examples/blob/master/dcgan/main.py
 
-The network framework is similar to DCGAN, you can see the code of DCGAN in pytorch in the webside: https://github.com/pytorch/examples/blob/master/dcgan/main.py
+Also, the structure of GaitGAN network is similar to "PixelDTGAN",
+in the webside of: https://github.com/fxia22/PixelDTGAN/blob/master/main.lua 
+and the bug-fixed version in : https://github.com/nashory/pixel-level-dt-torch/main.lua
 
 Dataset preparation:
 GEIs of CASIA-B DataSet
