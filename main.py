@@ -16,10 +16,6 @@ import torchvision.utils as vutils
 import visdom
 from torch.autograd import Variable
 
-vis = visdom.Visdom()
-vis.env = 'vae_dcgan'
-
-
 parser = argparse.ArgumentParser()
 parser.add_argument('--dataset', required=True, help='folder')
 parser.add_argument('--dataroot', required=True, help='path to dataset')
@@ -48,6 +44,7 @@ try:
 except OSError:
     pass
 
+## set the manualSeed
 if opt.manualSeed is None:
     opt.manualSeed = random.randint(1,10000)
 random.seed(opt.manualSeed)
@@ -61,14 +58,19 @@ cudnn.benchmark = True
 if torch.cuda.is_available() and not opt.cuda:
     print("WARNING: You have a CUDA device, so you should probably run with --cuda")
 
+##load the dataset, ToTensor means map the value range from (0 to 255) to (0 to 1)
+## normalize transform the channel to (channel-mean) /std  normalize(mean,std)
 dataset = dset.ImageFolder(root=opt.dataroot,
     transform=transforms.Compose([
          transforms.Scale(opt.imageSize),
-         transforms.CenterCrop(opt.imageSize),
+         transforms.CenterCrop(opt.imageSize), 
          transforms.ToTensor(),
          transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
     ]))
 
+##piece the dataset in the guidance of batch_size，shffule=True means that during
+##each epoches for training, the sequence will be disordered
+##num_workers=2 means that use two progress to load the data
 assert dataset
 dataloader = torch.utils.data.DataLoader(dataset, batch_size=opt.batchSize,
                                          shuffle=True, num_workers=int(opt.workers))
