@@ -226,113 +226,109 @@ optimizerD = optim.Adam(netD.parameters(), lr=opt.lr, betas=(opt.beta1, 0.999))
 optimizerA = optim.Adam(netA.parameters(), lr=opt.lr, betas=(opt.beta1, 0.999))
 optimizerG = optim.Adam(netG.parameters(), lr=opt.lr, betas=(opt.beta1, 0.999))
 
-###########################
-# (1) Update D network
-###########################
-def fDx(x):
-    netD.zero_grad()
-    # train with real(associated)
-    real_cpu, _ = data
-    batch_size = real_cpu.size(0)
-    if opt.cuda:
-        real_cpu = real_cpu.cuda()
-    input.resize_as_(real_cpu).copy_(real_cpu)
-    label.resize_(batch_size).fill_(real_label)
-    labelv = Variable(label.fill_(real_label))
-        
-    ass_labelv = Variable(ass_label)     
-    output = netD(ass_labelv)
-    errD_real1 = criterion(output, labelv)
-    errD_real1.backward()
-    ##D_x1 = output.data.mean()
-
-    # train with real(not associated)
-    noass_labelv = Variable(noass_label) 
-    output = netD(noass_labelv)
-    errD_real2 = criterion(output, labelv)
-    errD_real2.backward()
-    ##D_x2 = output.data.mean()
-
-    # train with fake
-    input_imgv = Variable(input_img)
-    fake = netG(input_imgv)   
-    labelv = Variable(label.fill_(fake_label))
-    output = netD(fake)
-    errD_fake = criterion(output, labelv)
-    errD_fake.backward()
-    ##D_G_z1 = output.data.mean()
-
-    errD = (errD_real1 + errD_real2 + errD_fake) / 3
-    optimizerD.step()
-
-###########################
-# (1) Update A network
-###########################
-def fAx(x):
-    netA.zero_grad()
-        
-    input_imgv = Variable(input_img)
-    fake = netG(input_imgv)
-    assd = torch.cat(input_img, ass_label, 2)
-    noassd = torch.cat(input_img, noass_label, 2)
-    faked = torch.cat(input_img, fake, 2)
-        
-    assdv = Variable(assd)
-    noassdv = Variable(noass)
-    fakedv = Variable(faked)
-
-    # train with associated
-    labelv = Variable(label.fill_(real_label))
-    output = netA(assdv)
-    errA_real1 = criterion(output, labelv)
-    errA_real1.backward()
-    ##D_G_z1 = output.data.mean()
-
-    # train with not associated
-    labelv = Variable(label.fill_(fake_label))
-    output = netA(noassdv)
-    errA_real2 = criterion(output, labelv)
-    errA_real2.backward()
-    ##D_G_z2 = output.data.mean()
-  
-    # train with fake
-    output = netA(fakedv)
-    errA_fake = criterion(output, labelv)
-    errA_fake.backward()
-    ##D_G_z3 = output.data.mean()	   
-
-    errA = (errA_real1 + errA_real2 + errA_fake) / 3
-    optimizerA.step()
-
-###########################
-# (1) Update G network
-###########################
-def fGx(x):
-    netG.zero_grad()
-    input_imgv = Variable(input_img)
-    fake = netG(input_imgv)
-    faked = torch.cat(input_img, fake, 2)
-    fakedv = Variable(faked)
-    labelv = Variable(label.fill_(real_label))
-    
-    output = netD(fake)
-    errGD = criterion(output, labelv)
-    errGD.backward()
-    ##local df_dg = netD:updateGradInput(fake, df_do)
-    
-    output = netA(faked)
-    errGA = criterion(output, labelv)
-    errGA.backward()
-    ##local df_dg2 = netA:updateGradInput(faked, df_do)
-    ##local df_dg = df_dg2[{{},{4,6}}]
-
-    errG = (errGA + errGD) /2
-    optimizerG.step()
-    
-    
+ 
 for epoch in range(opt.nepoch):
-    for i, data in enumerate(dataloader, 0):
+    for i, data in enumerate(dataloader):
+    ###########################
+    # (1) Update D network
+    ###########################
+        netD.zero_grad()
+        # train with real(associated)
+        real_cpu, _ = data
+        batch_size = real_cpu.size(0)
+        if opt.cuda:
+            real_cpu = real_cpu.cuda()
+        input.resize_as_(real_cpu.size()).copy_(real_cpu)
+        label.data.resize_(real_cpu.size(0)).fill_(real_label)
+            
+        ass_labelv = Variable(ass_label)     
+        output = netD(ass_labelv)
+        errD_real1 = criterion(output, labelv)
+        errD_real1.backward()
+        ##D_x1 = output.data.mean()
 
+        # train with real(not associated)
+        noass_labelv = Variable(noass_label) 
+        output = netD(noass_labelv)
+        errD_real2 = criterion(output, labelv)
+        errD_real2.backward()
+        ##D_x2 = output.data.mean()
+
+        # train with fake
+        input_imgv = Variable(input_img)
+        fake = netG(input_imgv)   
+        labelv = Variable(label.fill_(fake_label))
+        output = netD(fake)
+        errD_fake = criterion(output, labelv)
+        errD_fake.backward()
+        ##D_G_z1 = output.data.mean()
+
+        errD = (errD_real1 + errD_real2 + errD_fake) / 3
+        optimizerD.step()
+
+    ###########################
+    # (1) Update A network
+    ###########################
+        netA.zero_grad()
+            
+        input_imgv = Variable(input_img)
+        fake = netG(input_imgv)
+        assd = torch.cat(input_img, ass_label, 2)
+        noassd = torch.cat(input_img, noass_label, 2)
+        faked = torch.cat(input_img, fake, 2)
+            
+        assdv = Variable(assd)
+        noassdv = Variable(noass)
+        fakedv = Variable(faked)
+
+        # train with associated
+        labelv = Variable(label.fill_(real_label))
+        output = netA(assdv)
+        errA_real1 = criterion(output, labelv)
+        errA_real1.backward()
+        ##D_G_z1 = output.data.mean()
+
+        # train with not associated
+        labelv = Variable(label.fill_(fake_label))
+        output = netA(noassdv)
+        errA_real2 = criterion(output, labelv)
+        errA_real2.backward()
+        ##D_G_z2 = output.data.mean()
+      
+        # train with fake
+        output = netA(fakedv)
+        errA_fake = criterion(output, labelv)
+        errA_fake.backward()
+        ##D_G_z3 = output.data.mean()	   
+
+        errA = (errA_real1 + errA_real2 + errA_fake) / 3
+        optimizerA.step()
+
+    ###########################
+    # (1) Update G network
+    ###########################
+        netG.zero_grad()
+        input_imgv = Variable(input_img)
+        fake = netG(input_imgv)
+        faked = torch.cat(input_img, fake, 2)
+        fakedv = Variable(faked)
+        labelv = Variable(label.fill_(real_label))
+        
+        output = netD(fake)
+        errGD = criterion(output, labelv)
+        errGD.backward()
+        ##local df_dg = netD:updateGradInput(fake, df_do)
+        
+        output = netA(faked)
+        errGA = criterion(output, labelv)
+        errGA.backward()
+        ##local df_dg2 = netA:updateGradInput(faked, df_do)
+        ##local df_dg = df_dg2[{{},{4,6}}]
+
+        errG = (errGA + errGD) /2
+        optimizerG.step()
+        
+    
         print('[%d/%d][%d/%d] Loss_D: %.4f Loss_G: %.4f D(x): %.4f D(G(z)): %.4f / %.4f'
               % (epoch, opt.nepoch, i, len(dataloader),
                  errD.data[0], errG.data[0], D_x, D_G_z1, D_G_z2))
@@ -348,3 +344,4 @@ for epoch in range(opt.nepoch):
     # do checkpointing
     torch.save(netG.state_dict(), '%s/netG_epoch_%d.pth' % (opt.outf, epoch))
     torch.save(netD.state_dict(), '%s/netD_epoch_%d.pth' % (opt.outf, epoch))
+    torch.save(netA.state_dict(), '%s/netA_epoch_%d.pth' % (opt.outf, epoch))
