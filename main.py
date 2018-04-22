@@ -66,7 +66,7 @@ dataset = dset.ImageFolder(root=opt.dataroot,
          transforms.Scale(opt.imageSize),
          transforms.CenterCrop(opt.imageSize), 
          transforms.ToTensor(),
-         transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
+         transforms.Normalize(0.5, 0.5),
     ]))
 
 ##piece the dataset in the guidance of batch_size，shffule=True means that during
