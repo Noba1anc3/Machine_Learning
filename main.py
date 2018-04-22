@@ -162,6 +162,7 @@ class _netD(nn.Module):
             output = nn.parallel.data_parallel(self.main, input, range(self.ngpu))
         else:
             output = self.main(input)
+            ##torch.view: to transform the scale of the tensor to other appearance
         return output.view(-1, 1)
 
 netD = _netD(ngpu)
