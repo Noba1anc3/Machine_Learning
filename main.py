@@ -80,7 +80,7 @@ ngpu = int(opt.ngpu)
 ngf = int(opt.ngf)
 ndf = int(opt.ndf)
 naf = int(opt.naf)
-nc = 3
+nc = 1
 
 # custom weights initialization called on netG, netD and netA
 def weights_init(m):
@@ -206,9 +206,9 @@ print(netA)
 
 criterion = nn.BCELoss()
 
-input_img = torch.FloatTensor(opt.batchSize, 3, opt.imageSize, opt.imageSize)
-ass_label = torch.FloatTensor(opt.batchSize, 3, opt.imageSize, opt.imageSize)
-noass_label = torch.FloatTensor(opt.batchSize, 3, opt.imageSize, opt.imageSize)
+input_img = torch.FloatTensor(opt.batchSize, 1, opt.imageSize, opt.imageSize)
+ass_label = torch.FloatTensor(opt.batchSize, 1, opt.imageSize, opt.imageSize)
+noass_label = torch.FloatTensor(opt.batchSize, 1, opt.imageSize, opt.imageSize)
 label = torch.FloatTensor(opt.batchSize, 1)	
 real_label = 1
 fake_label = 0
