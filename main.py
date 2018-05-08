@@ -275,38 +275,33 @@ def fDx(x):
 ###########################
 def fAx(x):
     netA.zero_grad()
-        
-    input_imgv = Variable(input_img)
-    fake = netG(input_imgv)
+    
+    fake = netG(input_img)
     assd = torch.cat(input_img, ass_label, 2)
     noassd = torch.cat(input_img, noass_label, 2)
     faked = torch.cat(input_img, fake, 2)
         
-    assdv = Variable(assd)
-    noassdv = Variable(noass)
-    fakedv = Variable(faked)
-
     # train with associated
-    labelv = Variable(label.fill_(real_label))
-    output = netA(assdv)
-    errA_real1 = criterion(output, labelv)
+    label.data.fill_(real_label)
+    output = netA(assd)
+    errA_real1 = criterion(output, label)
     errA_real1.backward()
     ##D_G_z1 = output.data.mean()
 
     # train with not associated
-    labelv = Variable(label.fill_(fake_label))
-    output = netA(noassdv)
-    errA_real2 = criterion(output, labelv)
+    label.data.fill_(fake_label)
+    output = netA(noassd)
+    errA_real2 = criterion(output, label)
     errA_real2.backward()
     ##D_G_z2 = output.data.mean()
   
     # train with fake
-    output = netA(fakedv)
-    errA_fake = criterion(output, labelv)
+    output = netA(faked)
+    errA_fake = criterion(output, label)
     errA_fake.backward()
     ##D_G_z3 = output.data.mean()	   
 
-    errA = (errA_real1 + errA_real2 + errA_fake) / 3
+    errA = errA_real1 + errA_real2 + errA_fake
     optimizerA.step()
 
 ###########################
