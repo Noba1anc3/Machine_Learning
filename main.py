@@ -326,17 +326,15 @@ for epoch in range(opt.nepoch):
         errG = errGA + errGD
         optimizerG.step()
 
-        print('[%d/%d][%d/%d] Loss_D: %.4f Loss_G: %.4f D(x): %.4f D(G(z)): %.4f / %.4f'
-              % (epoch, opt.nepoch, i, len(dataloader),
-                 errD.data[0], errG.data[0], D_x, D_G_z1, D_G_z2))
-        if i % 100 == 0:
-            vutils.save_image(real_cpu,
-                    '%s/real_samples.png' % opt.outf,
-                    normalize=True)
-            fake = netG(fixed_noise)
+        ########### Logging #########
+        print('[%d/%d][%d/%d] Loss_D: %.4f Loss_A: %.4f Loss_G: %.4f '
+           % (epoch, opt.niter, i, len(dataloader),errD.data[0], errA.data[0],errG.data[0]))
+
+        ########## Visualize #########
+        if(i % 50 == 0):
             vutils.save_image(fake.data,
-                    '%s/fake_samples_epoch_%03d.png' % (opt.outf, epoch),
-                    normalize=True)
+                        '%s/fake_samples_epoch_%03d.png' % (opt.outf, epoch),
+                        normalize=True)
 
     # do checkpointing
     torch.save(netG.state_dict(), '%s/netG_epoch_%d.pth' % (opt.outf, epoch))
