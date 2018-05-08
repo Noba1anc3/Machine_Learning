@@ -237,38 +237,37 @@ optimizerG = optim.Adam(netG.parameters(), lr=opt.lr, betas=(opt.beta1, 0.999))
 ###########################
 def fDx(x):
     netD.zero_grad()
+    
     # train with real(associated)
-    real_cpu, _ = data
-    batch_size = real_cpu.size(0)
+    # resize real because last batch may has less than
+    # opt.batchSize images
+    batch_size = images.size(0)
     if opt.cuda:
         real_cpu = real_cpu.cuda()
-    input.resize_as_(real_cpu).copy_(real_cpu)
-    label.resize_(batch_size).fill_(real_label)
-    labelv = Variable(label.fill_(real_label))
+    input_img.data.resize_(images.size()).copy_(images)
+    label.data.resize_(batch_size).fill_(real_label)
         
-    ass_labelv = Variable(ass_label)     
-    output = netD(ass_labelv)
-    errD_real1 = criterion(output, labelv)
+    output = netD(ass_label)
+    errD_real1 = criterion(output, label)
     errD_real1.backward()
     ##D_x1 = output.data.mean()
 
     # train with real(not associated)
-    noass_labelv = Variable(noass_label) 
-    output = netD(noass_labelv)
-    errD_real2 = criterion(output, labelv)
+    output = netD(noass_label)
+    errD_real2 = criterion(output, label)
     errD_real2.backward()
     ##D_x2 = output.data.mean()
 
     # train with fake
-    input_imgv = Variable(input_img)
-    fake = netG(input_imgv)   
-    labelv = Variable(label.fill_(fake_label))
-    output = netD(fake)
+    label.data.fill_(fake_label)
+    fake = netG(input_img)   
+    # detach gradients here so that gradients of G won't be updated
+    output = netD(fake.detach())
     errD_fake = criterion(output, labelv)
     errD_fake.backward()
     ##D_G_z1 = output.data.mean()
 
-    errD = (errD_real1 + errD_real2 + errD_fake) / 3
+    errD = errD_real1 + errD_real2 + errD_fake
     optimizerD.step()
 
 ###########################
@@ -337,7 +336,7 @@ def fGx(x):
     
     
 for epoch in range(opt.nepoch):
-    for i, data in enumerate(dataloader):
+    for i, (images,_) in enumerate(dataloader):
         
 
         print('[%d/%d][%d/%d] Loss_D: %.4f Loss_G: %.4f D(x): %.4f D(G(z)): %.4f / %.4f'
