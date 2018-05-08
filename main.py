@@ -231,105 +231,100 @@ if opt.cuda:
 optimizerD = optim.Adam(netD.parameters(), lr=opt.lr, betas=(opt.beta1, 0.999))
 optimizerA = optim.Adam(netA.parameters(), lr=opt.lr, betas=(opt.beta1, 0.999))
 optimizerG = optim.Adam(netG.parameters(), lr=opt.lr, betas=(opt.beta1, 0.999))
-
-###########################
-# (1) Update D network
-###########################
-def fDx(x):
-    netD.zero_grad()
-    
-    # train with real(associated)
-    # resize real because last batch may has less than
-    # opt.batchSize images
-    batch_size = images.size(0)
-    if opt.cuda:
-        real_cpu = real_cpu.cuda()
-    input_img.data.resize_(images.size()).copy_(images)
-    label.data.resize_(batch_size).fill_(real_label)
-        
-    output = netD(ass_label)
-    errD_real1 = criterion(output, label)
-    errD_real1.backward()
-    ##D_x1 = output.data.mean()
-
-    # train with real(not associated)
-    output = netD(noass_label)
-    errD_real2 = criterion(output, label)
-    errD_real2.backward()
-    ##D_x2 = output.data.mean()
-
-    # train with fake
-    label.data.fill_(fake_label)
-    fake = netG(input_img)   
-    # detach gradients here so that gradients of G won't be updated
-    output = netD(fake.detach())
-    errD_fake = criterion(output, labelv)
-    errD_fake.backward()
-    ##D_G_z1 = output.data.mean()
-
-    errD = errD_real1 + errD_real2 + errD_fake
-    optimizerD.step()
-
-###########################
-# (1) Update A network
-###########################
-def fAx(x):
-    netA.zero_grad()
-    
-    fake = netG(input_img)
-    assd = torch.cat(input_img, ass_label, 2)
-    noassd = torch.cat(input_img, noass_label, 2)
-    faked = torch.cat(input_img, fake, 2)
-        
-    # train with associated
-    label.data.fill_(real_label)
-    output = netA(assd)
-    errA_real1 = criterion(output, label)
-    errA_real1.backward()
-    ##D_G_z1 = output.data.mean()
-
-    # train with not associated
-    label.data.fill_(fake_label)
-    output = netA(noassd)
-    errA_real2 = criterion(output, label)
-    errA_real2.backward()
-    ##D_G_z2 = output.data.mean()
-  
-    # train with fake
-    output = netA(faked)
-    errA_fake = criterion(output, label)
-    errA_fake.backward()
-    ##D_G_z3 = output.data.mean()	   
-
-    errA = errA_real1 + errA_real2 + errA_fake
-    optimizerA.step()
-
-###########################
-# (1) Update G network
-###########################
-def fGx(x):
-    netG.zero_grad()
-    label.data.fill_(real_label)
-    faked = torch.cat(input_img, fake, 2)
-
-    output = netD(faked)
-    errGD = criterion(output, label)
-    errGD.backward()
-    ##local df_dg = netD:updateGradInput(fake, df_do)
-    
-    output = netA(faked)
-    errGA = criterion(output, label)
-    errGA.backward()
-    ##local df_dg2 = netA:updateGradInput(faked, df_do)
-    ##local df_dg = df_dg2[{{},{4,6}}]
-
-    errG = errGA + errGD
-    optimizerG.step()
-    
     
 for epoch in range(opt.nepoch):
     for i, (images,_) in enumerate(dataloader):
+        ###########################
+        # (1) Update D network
+        ###########################
+        netD.zero_grad()
+
+        # train with real(associated)
+        # resize real because last batch may has less than
+        # opt.batchSize images
+        batch_size = images.size(0)
+        if opt.cuda:
+            real_cpu = real_cpu.cuda()
+        input_img.data.resize_(images.size()).copy_(images)
+        label.data.resize_(batch_size).fill_(real_label)
+
+        output = netD(ass_label)
+        errD_real1 = criterion(output, label)
+        errD_real1.backward()
+        ##D_x1 = output.data.mean()
+
+        # train with real(not associated)
+        output = netD(noass_label)
+        errD_real2 = criterion(output, label)
+        errD_real2.backward()
+        ##D_x2 = output.data.mean()
         
+        # train with fake
+        label.data.fill_(fake_label)
+        fake = netG(input_img)   
+        # detach gradients here so that gradients of G won't be updated
+        output = netD(fake.detach())
+        errD_fake = criterion(output, labelv)
+        errD_fake.backward()
+        ##D_G_z1 = output.data.mean()
+
+        errD = errD_real1 + errD_real2 + errD_fake
+        optimizerD.step()           
+        
+        ###########################
+        # (1) Update A network
+        ###########################
+        netA.zero_grad()
+
+        fake = netG(input_img)
+        assd = torch.cat(input_img, ass_label, 2)
+        noassd = torch.cat(input_img, noass_label, 2)
+        faked = torch.cat(input_img, fake, 2)
+
+        # train with associated
+        label.data.fill_(real_label)
+        output = netA(assd)
+        errA_real1 = criterion(output, label)
+        errA_real1.backward()
+        ##D_G_z1 = output.data.mean()
+
+        # train with not associated
+        label.data.fill_(fake_label)
+        output = netA(noassd)
+        errA_real2 = criterion(output, label)
+        errA_real2.backward()
+        ##D_G_z2 = output.data.mean()
+
+        # train with fake
+        output = netA(faked)
+        errA_fake = criterion(output, label)
+        errA_fake.backward()
+        ##D_G_z3 = output.data.mean()	   
+
+        errA = errA_real1 + errA_real2 + errA_fake
+        optimizerA.step()
+
+        ###########################
+        # (1) Update G network
+        ###########################
+
+        netG.zero_grad()
+        label.data.fill_(real_label)
+        faked = torch.cat(input_img, fake, 2)
+
+        output = netD(faked)
+        errGD = criterion(output, label)
+        errGD.backward()
+        ##local df_dg = netD:updateGradInput(fake, df_do)
+
+        output = netA(faked)
+        errGA = criterion(output, label)
+        errGA.backward()
+        ##local df_dg2 = netA:updateGradInput(faked, df_do)
+        ##local df_dg = df_dg2[{{},{4,6}}]
+
+        errG = errGA + errGD
+        optimizerG.step()
 
         print('[%d/%d][%d/%d] Loss_D: %.4f Loss_G: %.4f D(x): %.4f D(G(z)): %.4f / %.4f'
               % (epoch, opt.nepoch, i, len(dataloader),
