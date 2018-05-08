@@ -314,24 +314,21 @@ def fAx(x):
 ###########################
 def fGx(x):
     netG.zero_grad()
-    input_imgv = Variable(input_img)
-    fake = netG(input_imgv)
+    label.data.fill_(real_label)
     faked = torch.cat(input_img, fake, 2)
-    fakedv = Variable(faked)
-    labelv = Variable(label.fill_(real_label))
-    
-    output = netD(fake)
-    errGD = criterion(output, labelv)
+
+    output = netD(faked)
+    errGD = criterion(output, label)
     errGD.backward()
     ##local df_dg = netD:updateGradInput(fake, df_do)
     
     output = netA(faked)
-    errGA = criterion(output, labelv)
+    errGA = criterion(output, label)
     errGA.backward()
     ##local df_dg2 = netA:updateGradInput(faked, df_do)
     ##local df_dg = df_dg2[{{},{4,6}}]
 
-    errG = (errGA + errGD) /2
+    errG = errGA + errGD
     optimizerG.step()
     
     
