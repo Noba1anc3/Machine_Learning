@@ -214,6 +214,11 @@ label = torch.FloatTensor(opt.batchSize, 1)
 real_label = 1
 fake_label = 0
 
+input_img = Variable(input_img)
+ass_label = Variable(ass_label)
+noass_label = Variable(noass_label)
+label = Variable(label)
+
 if opt.cuda:
     netD.cuda()
     netA.cuda()
