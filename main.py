@@ -296,6 +296,7 @@ for epoch in range(opt.nepoch):
         ##D_G_z2 = output.data.mean()
 
         # train with fake
+        label.data.fill_(fake_label)
         output = netA(faked)
         errA_fake = criterion(output, label)
         errA_fake.backward()
