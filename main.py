@@ -264,7 +264,7 @@ for epoch in range(opt.nepoch):
         fake = netG(input_img)   
         # detach gradients here so that gradients of G won't be updated
         output = netD(fake.detach())
-        errD_fake = criterion(output, labelv)
+        errD_fake = criterion(output, label)
         errD_fake.backward()
         ##D_G_z1 = output.data.mean()
 
