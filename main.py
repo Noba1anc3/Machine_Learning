@@ -310,6 +310,9 @@ for epoch in range(opt.nepoch):
         ###########################
 
         netG.zero_grad()
+        
+        fake = netG(input_img)
+        output = netD(fake)
         label.data.fill_(real_label)
         faked = torch.cat(input_img, fake, 2)
 
