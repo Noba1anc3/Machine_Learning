@@ -219,6 +219,32 @@ ass_label = Variable(ass_label)
 noass_label = Variable(noass_label)
 label = Variable(label)
 
+def getbatch():
+    batch = torch.Tensor(128,3,1,64,64)
+    for i = 1,128 do
+        seed = torch.random(1, 100000) -- fix seed
+        gen = torch.Generator()
+        torch.manualSeed(gen, i*seed)
+        r1 = torch.random(gen,1,cn)
+        r2 = torch.random(gen,1,cn)
+        r3 = torch.random(gen,1,mn[r1])
+
+        path1 = cloth_table[r1]
+        path2 = cloth_table[r2]
+        path3 = models_table[r1][r3]
+
+        img1 = loadImage(path1)
+        img2 = loadImage(path2)
+        img3 = loadImage(path3)
+        
+        batch[i][1] = img1
+        batch[i][2] = img2
+        batch[i][3] = img3
+    end
+    return batch
+end
+
+
 if opt.cuda:
     netD.cuda()
     netA.cuda()
