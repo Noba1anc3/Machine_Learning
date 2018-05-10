@@ -277,13 +277,11 @@ for epoch in range(opt.nepoch):
         output = netD(ass_label)
         errD_real1 = criterion(output, label)
         errD_real1.backward()
-        ##D_x1 = output.data.mean()
 
         # train with real(not associated)
         output = netD(noass_label)
         errD_real2 = criterion(output, label)
         errD_real2.backward()
-        ##D_x2 = output.data.mean()
         
         # train with fake
         label.data.fill_(fake_label)
@@ -292,7 +290,6 @@ for epoch in range(opt.nepoch):
         output = netD(fake.detach())
         errD_fake = criterion(output, label)
         errD_fake.backward()
-        ##D_G_z1 = output.data.mean()
 
         errD = errD_real1 + errD_real2 + errD_fake
         optimizerD.step()           
@@ -312,21 +309,18 @@ for epoch in range(opt.nepoch):
         output = netA(assd)
         errA_real1 = criterion(output, label)
         errA_real1.backward()
-        ##D_G_z1 = output.data.mean()
 
         # train with not associated
         label.data.fill_(fake_label)
         output = netA(noassd)
         errA_real2 = criterion(output, label)
         errA_real2.backward()
-        ##D_G_z2 = output.data.mean()
 
         # train with fake
         label.data.fill_(fake_label)
         output = netA(faked)
         errA_fake = criterion(output, label)
-        errA_fake.backward()
-        ##D_G_z3 = output.data.mean()	   
+        errA_fake.backward()   
 
         errA = errA_real1 + errA_real2 + errA_fake
         optimizerA.step()
