@@ -303,9 +303,9 @@ for epoch in range(opt.nepoch):
         netA.zero_grad()
 
         fake = netG(input_img)
-        assd = torch.cat(input_img, ass_label, 2)
-        noassd = torch.cat(input_img, noass_label, 2)
-        faked = torch.cat(input_img, fake, 2)
+        assd = torch.cat((input_img, ass_label), 2)
+        noassd = torch.cat((input_img, noass_label), 2)
+        faked = torch.cat((input_img, fake), 2)
 
         # train with associated
         label.data.fill_(real_label)
@@ -345,7 +345,7 @@ for epoch in range(opt.nepoch):
         ##local df_dg = netD:updateGradInput(fake, df_do)
         ##netG:backward(input_img, df_dg)
         
-        faked = torch.cat(input_img, fake, 2)
+        faked = torch.cat((input_img, fake), 2)
         output = netA(faked)
         label.data.fill_(real_label)
         errGA = criterion(output, label)
