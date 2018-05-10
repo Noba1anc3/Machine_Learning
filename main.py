@@ -340,18 +340,19 @@ for epoch in range(opt.nepoch):
         fake = netG(input_img)
         output = netD(fake)
         label.data.fill_(real_label)
-        faked = torch.cat(input_img, fake, 2)
-
-        output = netD(faked)
         errGD = criterion(output, label)
         errGD.backward()
         ##local df_dg = netD:updateGradInput(fake, df_do)
-
+        ##netG:backward(input_img, df_dg)
+        
+        faked = torch.cat(input_img, fake, 2)
         output = netA(faked)
+        label.data.fill_(real_label)
         errGA = criterion(output, label)
         errGA.backward()
         ##local df_dg2 = netA:updateGradInput(faked, df_do)
         ##local df_dg = df_dg2[{{},{4,6}}]
+        ##netG:backward(input_img, df_dg)
 
         errG = errGA + errGD
         optimizerG.step()
