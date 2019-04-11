@@ -2,7 +2,7 @@ import numpy as np
 from keras.models import Sequential
 from keras.layers.core import Dense, Dropout, Activation
 from keras.layers import Conv2D, MaxPooling2D, Flatten
-from keras.ooptimizaers import SGD, Adam
+from keras.optimizers import SGD, Adam
 from keras.utils import np_utils
 from keras.datasets import mnist
 
