@@ -10,47 +10,26 @@ conv -> maxpooling -> ... -> flatten -> dense
 
 The radical difference between dense connection and convolution lies in dense layer learn on overall mode, and convolution layer learn on partial mode.
 
-
-
 Two properties of CNN:
-
 - Pattern learned by CNN is translation invariant （平移不变性）
-
   - Patterns can be anywhere in the image
   - Visual Sense is also translation invariant
-
 - CNN can learn spatial hierarchies of patterns
-
   - CNN can learn more complicated and more abstract visual concept efficiently
-
   - Visual Sense also has spatial hierarchies
-
-    
 
 Every dimension on depth axis of processed image is a feature / filter.
 
-
-
 Two key params of Convolution:
-
 - Kernel Size: usually 3x3 or 5x5
-
 - Filter Num ( Output Depth )
 
-  
-
 Padding:
-
 - Add rows and columns on each edge of the input image, so that every pixel can be the center of the conv window.
-
 - Valid Padding : without padding (default)
-
 - Same Padding : output size equals to input size
 
-  
-
 Max-Pooling:
-
 - Usually with kernel size 2x2 and stride 2
 - Reasons:
   - Reduce num of element need to be processed (time complexity)
@@ -59,8 +38,6 @@ Max-Pooling:
 ## Train a CNN
 
 Big data is a relative conception, compared with the size and depth of the network you want to train.
-
-
 
 ```python
 from keras.preprocessing.image import ImageDataGenerator
@@ -72,19 +49,11 @@ train_generator = train_datagen.flow_from_directory(train_dir,
                                                     class_mode='binary')
 ```
 
-
-
 Python Generator
-
 - Object like iterator
-
 - Use 'for' or 'in' ... together
-
 - 'yield'
-
 - break manually
-
-  
 
 ```python
 history = model.fit_generator(train_generator, 
@@ -94,27 +63,22 @@ history = model.fit_generator(train_generator,
                               validation_steps = 50)
 ```
 
-
-
 Do not augment validation data.
 
 ## Pretrained CNN
 
 ### Feature Extraction
 
-Feature Extraction extract feature from new sample by the presentation learned by previous neural network. 
+Feature Extraction extract feature from new sample by the presentation learned by previous neural network.  
 Then, feature sent to a new classifier, and train from scratch.
 
-
-
-Usually there are two parts in the CNN for image classification: convolutional base & dense connected classifier.
+Usually there are two parts in the CNN for image classification: convolutional base & dense connected classifier.  
 Usually only the convolutional base is re-used.
-
-
 
 The generalization of the representation extracted by a conv-layer based on its depth in the model.  
 Layers near the bottom -> partial, general (edge, color, texture)  
 Layers near the top -> whole, abstract (cat's ear or dog's eye)  
+
 If new data ranges a lot from previous data, you'd better only use layers close to the bottom for feature extraction not whole conv-base.
 
 #### VGG16
@@ -128,15 +92,16 @@ If new data ranges a lot from previous data, you'd better only use layers close 
     '''
 
 - VGG16 in Keras
-  '''
+
+  ```python
   from keras.applications import VGG16
   conv_base = VGG16(weights='imagenet', include_top=False)
-  '''
+  ```
 
 - Architecture of VGG16
-  '''
+  ```python
   conv_base.summary()
-  '''
+  ```
 
 ### Finetune the model
 
