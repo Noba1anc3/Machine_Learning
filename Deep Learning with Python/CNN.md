@@ -140,7 +140,7 @@ Reasons:
 from keras import models
 layer_outputs = [layer.output for layer in model.layers[:8]]
 activation_model = models.Model(imputs = model.input, outputs = layer_outputs)
-activations = activation_model.predict(img_tensor)from keras import models
+activations = activation_model.predict(img_tensor)
 ```
 
 - First layer is a collection of various edge detectors
