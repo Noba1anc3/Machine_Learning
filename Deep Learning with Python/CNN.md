@@ -11,6 +11,7 @@ conv -> maxpooling -> ... -> flatten -> dense
 The radical difference between dense connection and convolution lies in dense layer learn on overall mode, and convolution layer learn on partial mode.
 
 Two properties of CNN:
+
 - Pattern learned by CNN is translation invariant （平移不变性）
   - Patterns can be anywhere in the image
   - Visual Sense is also translation invariant
@@ -21,15 +22,21 @@ Two properties of CNN:
 Every dimension on depth axis of processed image is a feature / filter.
 
 Two key params of Convolution:
+<<<<<<< HEAD
+=======
+
+>>>>>>> 193fe6610400ac90f8d6d7fa09ad74bfacd75917
 - Kernel Size: usually 3x3 or 5x5
 - Filter Num ( Output Depth )
 
 Padding:
+
 - Add rows and columns on each edge of the input image, so that every pixel can be the center of the conv window.
 - Valid Padding : without padding (default)
 - Same Padding : output size equals to input size
 
 Max-Pooling:
+
 - Usually with kernel size 2x2 and stride 2
 - Reasons:
   - Reduce num of element need to be processed (time complexity)
@@ -50,6 +57,7 @@ train_generator = train_datagen.flow_from_directory(train_dir,
 ```
 
 Python Generator
+
 - Object like iterator
 - Use 'for' or 'in' ... together
 - 'yield'
@@ -84,6 +92,10 @@ If new data ranges a lot from previous data, you'd better only use layers close 
 #### VGG16
 
 - VGG16
+<<<<<<< HEAD
+=======
+
+>>>>>>> 193fe6610400ac90f8d6d7fa09ad74bfacd75917
   - ( conv -> conv -> pool ) * 2 -> ( conv -> conv -> conv -> pool) * 3
   - Conv-Head : 14714688 params 
   - froze conv-head when training pretrained model based on VGG-16's conv-head + self-defined dense_connected_classifier, cause randomly initialized dense layer.
@@ -99,6 +111,10 @@ If new data ranges a lot from previous data, you'd better only use layers close 
   ```
 
 - Architecture of VGG16
+<<<<<<< HEAD
+=======
+
+>>>>>>> 193fe6610400ac90f8d6d7fa09ad74bfacd75917
   ```python
   conv_base.summary()
   ```
