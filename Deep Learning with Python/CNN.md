@@ -22,10 +22,6 @@ Two properties of CNN:
 Every dimension on depth axis of processed image is a feature / filter.
 
 Two key params of Convolution:
-<<<<<<< HEAD
-=======
-
->>>>>>> 193fe6610400ac90f8d6d7fa09ad74bfacd75917
 - Kernel Size: usually 3x3 or 5x5
 - Filter Num ( Output Depth )
 
@@ -111,10 +107,6 @@ If new data ranges a lot from previous data, you'd better only use layers close 
   ```
 
 - Architecture of VGG16
-<<<<<<< HEAD
-=======
-
->>>>>>> 193fe6610400ac90f8d6d7fa09ad74bfacd75917
   ```python
   conv_base.summary()
   ```
