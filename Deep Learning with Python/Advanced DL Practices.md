@@ -201,9 +201,9 @@ keras.application.inception_v3.InceptionV3
 
 #### Xception
 
-Xception = Extreme Inception
+Xception = Extreme Inception  
 
-Xception push learn channel feature and spatial feature separately to its extreme. Replace Inception module with deep separable convolution, the spatial feature and channel feature are completely separated.    
+Xception push learn channel feature and spatial feature separately to its extreme. Replace Inception module with deep separable convolution, the spatial feature and channel feature are completely separated.      
 
 Xception's parameters' num roughly equals to Inception V3. Because of its more efficient use of parameters, it have better performance on ImageNet and other large scale datasets.
 
@@ -286,7 +286,7 @@ model.fit([left_data, right_data], targets)
 
 ### Model As Layer
 
-Call a model on an input tensor, it will return a output tensor.
+Call a model on an input tensor, it will return a output tensor.  
 
 Call an instance, whether layer or model instance, it will reuse the representation the instance has learned.  
 
@@ -308,3 +308,253 @@ right_input = xception_base(right_input)
 merged_features = layers.concatenate([left_features, right_input], axis=-1)
 ```
 
+## Callback Function & TensorBoard
+
+### Callback Function
+
+Callback is an object sent to model when calling fit function, it will be called by the model at different time in the training process. It can access all available data about the state and performance of the model, and do something like: interrupt training, save model, load different weights or change the state of the model.  
+
+Some Usage :
+
+- Model checkpoint : Save current weights on different timing
+- Early stopping 
+- Tuning some parameter during training
+- Record training and validating result, or visualize the representation in real time
+
+```python
+keras.callbacks.ModelCheckpoint
+keras.callbacks.EarlyStopping
+keras.callbacks.LearningRateScheduler
+keras.callbacks.ReduceLROnPlateau
+keras.callbacks.CSVLogger
+```
+
+#### EarlyStopping & ModelCheckpoint
+
+```python
+import keras
+
+callbacks_list = [
+	keras.callbacks.EarlyStopping(
+		monitor='acc',
+		patience=1,
+    ),
+	keras.callbacks.ModelCheckpoint(
+		filepath='my_model.h5',
+		monitor='val_loss',
+		save_best_only=True,
+	)
+]
+
+model.compile(
+    optimizer='rmsprop',
+	loss='binary_crossentropy',
+	metrics=['acc'])
+
+model.fit(x, y,
+          epochs=10,
+          batch_size=32,
+          callbacks=callbacks_list,
+          validation_data=(x_val, y_val))
+```
+
+#### ReduceLROnPlateau
+
+If val loss do not reduce any more, you can use this callback function to reduce learning rate.  
+
+If loss plateau appears, magnify or reduce lr is an efficient strategy of jumping out local minimum.  
+
+```python
+callbacks_list = [
+	keras.callbacks.ReduceLROnPlateau(
+		monitor='val_loss'
+		factor=0.1,
+		patience=10,
+	)
+]
+
+model.fit(x, y,
+          epochs=10,
+          batch_size=32,
+          callbacks=callbacks_list,
+          validation_data=(x_val, y_val))
+```
+
+#### Write Customized Callback Function
+
+Setup a subclass of class ```keras.callbacks.Callback```, then you can implement such methods :
+
+- on_epoch_begin
+- on_epoch_end
+- on_batch_begin
+- on_batch_end
+- on_train_begin
+- on_train_end
+
+Callback Function and access such attributes :
+
+- self.model
+- self.validation_data
+
+Below is an example of customized callback function, it save every layer's activation to hard disk after every epoch, the activation is calculated on the first sample of validation data.
+
+```python
+import keras
+import numpy as np
+
+class ActivationLogger(keras.callbacks.Callback):
+    def set_model(self, model):
+        self.model = model
+        layer_outputs = [layer.output for layer in model.layers]
+        self.activations_model = keras.models.Model(model.input,
+                                                    layer_outputs)
+        
+    def on_epoch_end(self, epoch, logs=None):
+        if self.validation_data is None:
+        	raise RuntimeError('Requires validation_data.')
+            
+        validation_sample = self.validation_data[0][0:1]
+        activations = self.activations_model.predict(validation_sample)
+        
+        f = open('activations_at_epoch_' + str(epoch) + '.npz', 'w')
+        np.savez(f, activations)
+        f.close()
+```
+
+### TensorBoard
+
+Loop of Improvement : ``` Idea -> Experiment -> Result -> Idea```  
+
+TensorBoard is a visualization tool based on browser built in TensorFlow.  
+
+Here are some function of TensorBoard :
+
+- Monitoring on indicators with visualization during training
+- Visualize architecture of model
+- Visualize histogram of activation and gradient
+- Research embedding with 3-dim visualization
+
+```python
+callbacks = [
+	keras.callbacks.TensorBoard(
+		log_dir='my_log_dir',
+		histogram_freq=1,
+		embeddings_freq=1,
+	)
+]
+
+history = model.fit(x_train,
+                    y_train,
+                    epochs=20,
+                    batch_size=128,
+                    validation_split=0.2,
+                    callbacks=callbacks)
+```
+
+``` $ tensorboard --logdir=my_log_dir```  
+
+``` http://localhost:6006```  
+
+- SCALARS
+  - acc
+  - loss
+
+- HISTOGRAM
+
+- EMBEDDING
+  - PCA
+  - t-SNE
+
+- GRAPHS
+
+  - Visualization of Bottom TensorFlow Operation Graph
+
+  - A more concise way  ```keras.utils.plot_model``` 
+
+    - Layer Graph rather than Operation Graph
+
+    - ``` pip install pydot, pydot-ng, graphviz```
+    - ```plot_model(model, show_shapes = True, to_file = 'model.png')```
+
+## To Model's Extreme
+
+### Advanced Architecture
+
+#### Batch Normalization
+
+Normalization makes different sample similar to each other, it helps better learning and generalization.  
+
+``` normalized_data = (data - np.mean(data, axis = ...)) / np.std(data, axis = ...)```  
+
+We need consider normalization after every transformation in the network. Though data sent to dense or conv2d with mean 0 and std 1, it is not sure the output of network also conform to this.  
+
+Principle of Batch Normalization : It save the exponential shift average value of mean and variance of every batch of data during training inside the network.  
+
+Effect of Batch Normalization : It helps gradient propagation, avoid of gradient vanishing, allow for deeper network.  
+
+Batch Normalization often use after conv layer or dense layer.  
+
+BN receive a axis parameter, specify an axis to normalize, default is -1, means the last axis of input tensor.  
+
+##### Batch Renormalization
+
+Compared with BN, it has obvious advantage with cost increased slightly.
+
+##### Self-normalizing Neural Network
+
+It use special activation function (selu) and special initializer (lecun_normal), with the ability to keep data normalized after passing through any dense layer.
+
+#### Depthwise Separable Convolution
+
+- Lighter - Less trainable weights
+- Faster - Less float calculation
+- Better - More performance
+
+Execute spatial convolution on every channel, and mix them up by 1 x 1 convolution.  
+
+If your data's spatial location is highly correlated, and channels are relatively independent, it is better to do separable convolution.  
+
+``` layers.SeparableConv2D()```  
+
+For larger model, depthwise separable convolution is the basis of Xception.
+
+### Hyper-parameter Optimization
+
+Steps :
+
+- Select a set of hyper-parameters automatically
+- Construct corresponding model
+- Fit model on training data, measure its final performance on validating data
+- Select next group of hyper-parameters automatically
+- Repeat the process above
+- Finally, measure the performance on testing data
+
+Methods :
+
+- Bayesian Optimization
+- Genetic Algorithm
+- Simple Random Search
+
+We cannot do gradient descent in hyper-parameter space.  
+
+Usually random search is a good solution. There is a tool actually better than random search, it is a python lib named Hyperopt, use a tree of Parzen estimator to predict which set of hyper-parameter will get good result.  
+
+Hyperas : Hyperopt + Keras  
+
+Attention : You are tuning your hyper-parameter based on validation data. So your model will over-fitting on validation set at some point.  
+
+### Ensemble Learning
+
+Ensembling based on such a hypothesis : For different good model trained independently, their good performance may from different reason, every model make decision from slightly different perspective, get a part of 'truth', not all the truth. Gather their decision together, you can get a more precise description.  
+
+Ensemble Learning do weighted average on different model. The weight is calculated based on the performance on validating data. Usually, a more accurate model gets a bigger weight.  
+
+To guarantee a good ensembled model, the key is the diversity of a set of models. If all the models' bias on the same direction, ensemble learning also has this bias. However, if all the models' bias on different direction, the ensembled model will have more precise and stable performance.  
+
+All the models should both good and different. Usually, this means use different architecture, even different machine learning methods.  
+
+A effective way : tree-based method (random forest, gbdt ... ) + deep learning.
+
+Author's empirical experience : during his Kaggle competition, the model with lowest score derived from a method which different from all other models in ensemble learning (regularized greedy forest) was given a very small weight. However, the result was unexpected, because of its difference with other models, it provided information that other models can not get, improved the result tremendously.  
+
+Recently, a successful way to ensemble is "wide and deep", which means a collection of deep learning and shallow learning.  
