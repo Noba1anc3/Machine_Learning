@@ -13,14 +13,14 @@ LeNet-5 comes from < Gradient-Based Learning Applied to Document Recognition > [
    - Kernel Num : 6
    - Kernel Stride : 1
    - Kernel Padding : Valid
-- Output Size : 28 x 28 x  6
+   - Output Size : 28 x 28 x  6
    - Trainable Parameters : (5 * 5 + 1) * 6
    
 3. S2 Layer
    - Input Size : 28 x 28 x 6
    - Kernel Size : 2 x 2
    - Kernel Stride : 2
-- Output Size : 14 x 14 x 6
+   - Output Size : 14 x 14 x 6
    
 4. C3 Layer
    - Input Size : 14 x 14 x 6
@@ -37,7 +37,7 @@ LeNet-5 comes from < Gradient-Based Learning Applied to Document Recognition > [
    - Input Size : 10 x 10 x 16
    - Kernel Size : 2 x 2
    - Kernel Stride : 2
-- Output Size : 5 x 5 x 16
+   - Output Size : 5 x 5 x 16
    
 6. C5 Layer
    - Input Size : 5 x 5 x 16
