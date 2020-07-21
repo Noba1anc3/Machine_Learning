@@ -2,7 +2,7 @@
 
 LeNet-5 comes from < Gradient-Based Learning Applied to Document Recognition > [1998]
 
-![](https://cuijiahua.com/wp-content/uploads/2018/01/dl_3_4.jpg)
+![](http://m.qpic.cn/psc?/V50VqFfH2A6OlZ2gWBDL0uxzNK4WmFgm/bqQfVz5yrrGYSXMvKr.cqagfeGMNBGxKDeJiY2k.CwLO*dZRy7hA9RhMvwuC0eYqerDdesewC83KT57.lvn649ChntjMBtoObCMfXywQAYg!/b&bo=vALBALwCwQABCS4!&rf=viewer_4)
 
 1. Input Layer
    - 32 x 32
@@ -31,7 +31,7 @@ LeNet-5 comes from < Gradient-Based Learning Applied to Document Recognition > [
    - Output Size : 10 x 10 x 16
    - Trainable Parameters : 6 * (3 * 5 * 5 + 1) + 6 * (4 * 5 * 5 + 1) + 3 * (4 * 5 * 5 + 1) + 1 * (6 * 5 * 5 + 1) 
 
-![](https://cuijiahua.com/wp-content/uploads/2018/01/dl_3_5.png)
+![](http://m.qpic.cn/psc?/V50VqFfH2A6OlZ2gWBDL0uxzNK4WmFgm/TmEUgtj9EK6.7V8ajmQrEBUaA7olgnpkXZ6C8FZ0V10iAkRmNI3xXFsg8KH49x*uz0DSLpRDTZ6DqrOUohWuxHiCh.0rzLN6IvgDKTFiqYs!/b&bo=rgGvAK4BrwADGTw!&rf=viewer_4)
 
 5. S4 Layer
    - Input Size : 10 x 10 x 16
@@ -68,7 +68,7 @@ Widely Used Today :
 - Dropout
 - Local Response Normalization (like BN)
 
-![](https://cdn.jsdelivr.net/gh/mao-jy/mao-jy.github.io/2020/06/27/AlexNet/AlexNet_Andrew_Ng_20200627.png)
+![](http://m.qpic.cn/psc?/V50VqFfH2A6OlZ2gWBDL0uxzNK4WmFgm/TmEUgtj9EK6.7V8ajmQrEAITVFwhoT2KaQCJhav3WBD8USzKbB8fNzrkG5uAB0P6gzoxR9a0ECsHCXYngZFs0tCGy4VhXsqf.8A5yj0Z5pw!/b&bo=UwNMAVMDTAEDGTw!&rf=viewer_4)
 
 ## Structure
 
@@ -89,7 +89,7 @@ Widely Used Today :
 
 ​	Previously, we used sigmoid or tanh as the activation function of the model, but for gradient descent, unsaturated nonlinear functions (such as relu) are much faster than saturated nonlinear functions. The following figure shows the author's experiment on cifar-10 dataset, using a four layer convolution network structure, where the solid line represents the convergence process of relu activation function, and the dotted line represents the convergence process of tanh activation function. The training error rate reaching 0.25 is 6 times faster than tanh. The author also points out that the experimental results may vary with the network structure, but relu is always several times faster than saturated linear function.
 
-![](https://cdn.jsdelivr.net/gh/mao-jy/mao-jy.github.io/2020/06/27/AlexNet/ReLU_20200627.png)
+![](http://m.qpic.cn/psc?/V50VqFfH2A6OlZ2gWBDL0uxzNK4WmFgm/TmEUgtj9EK6.7V8ajmQrEID.PY.jvY2JILbiZBuU0zC8aLRHkdbb60RLa17bdUjFPLYbTqj9GQmr.hhARjTP8Q6ehHNStcKWA1vHy5H4QGU!/b&bo=2QFyAdkBcgEDGTw!&rf=viewer_4)
 
 Note : For function y = f(x), when derivative of function f(x) tends to 0 when x tends to positive infinity, called right saturate. When derivative of function f(x) tends to 0 when x tends to negative infinity, called left saturate. When f (x) satisfies both left saturation and right saturation, f (x) is called saturation function.
 
@@ -99,7 +99,7 @@ Note : For function y = f(x), when derivative of function f(x) tends to 0 when x
 
 ### Appendix : Network Structure in the Paper
 
-![](https://cdn.jsdelivr.net/gh/mao-jy/mao-jy.github.io/2020/06/27/AlexNet/AlexNet_20200627.png)
+![](http://m.qpic.cn/psc?/V50VqFfH2A6OlZ2gWBDL0uxzNK4WmFgm/TmEUgtj9EK6.7V8ajmQrEHEZOUKKwt5tyEIbJJ4zjHsFpra1RCOaCpKw8UL8MzyPa2LQIxl9wRnJz5pAWgv9pLxh302vRqA*uEBzK6X0OOg!/b&bo=*gSbAf4EmwEDGTw!&rf=viewer_4)
 
 ​	The network structure in this paper is roughly similar to the previous network structure, but some details are different. Moreover, due to the use of double GPU for calculation, some parts of the network structure are also for parallel operation, so the picture looks a little complicated. The missing part above is not the lack of screenshots, but the original picture in the paper.
 
@@ -113,7 +113,7 @@ Paper : [Very Deep Convolutional Networks for Large-Scale Image Recognition](htt
 
 ## Network Structure
 
-![](https://cdn.jsdelivr.net/gh/mao-jy/mao-jy.github.io/2020/07/02/VGG/VGG-16_20200702.png)
+![](http://m.qpic.cn/psc?/V50VqFfH2A6OlZ2gWBDL0uxzNK4WmFgm/TmEUgtj9EK6.7V8ajmQrENSDvieuZeiCxpOFxJf7H4Zm9f.iPqy8foGDwpqdj9jodtqpcZ41agdyh6ia4C2AQUbsrLo8YCMtl3yFmd7nH*I!/b&bo=FQXWAhUF1gIDKQw!&rf=viewer_4)
 
 - VGGNet uses 3 × 3 kernel size and 2 × 2 pooling windows. Different from AlexNet, all kernels in VGG uses 3 × 3 convolution kernel. It is not difficult to find that the receptive field obtained by 5 × 5 convolution is the same as that of two 3 × 3 convolutions, and the receptive field of 7 × 7 convolution is the same as that of three 3 × 3 convolutions. However, compared with the large convolution, the advantage of 3 × 3 convolution is that: 
   - The num of  parameters is small : assuming that the input and output are all C channels, the convolution of 7 × 7 requires 7 × 7 × C × C = 49C^2 parameters, while the 3 × 3 convolution of three stacks only needs (3 × 3 × C × C) × 3 = 27C^2 parameters.
@@ -122,7 +122,7 @@ Paper : [Very Deep Convolutional Networks for Large-Scale Image Recognition](htt
 
 - According to different depths, the author has carried out several groups of comparative experiments. The final result is that VGG-16 and VGG-19 are obviously better than other networks. Therefore, what we usually call VGG or VGGNet generally refers to VGG-16 or VGG-19. The specific network structure is shown in the figure below. The same thing with GoogLeNet is that the author also tried 1 × 1 convolution, and the conclusion is: 1 × 1 convolution is effective, but the effect is not as good as 3 × 3 convolution.
 
-![](https://cdn.jsdelivr.net/gh/mao-jy/mao-jy.github.io/2020/07/02/VGG/VGGNet_20200702.png)
+![](http://m.qpic.cn/psc?/V50VqFfH2A6OlZ2gWBDL0uxzNK4WmFgm/TmEUgtj9EK6.7V8ajmQrENbwxvsAeQl1S7npAkF.k.shQfdB8I0iV7r07L7dv3YMo3ac.9AE2Mxm8SEhVBC1AP5VfwCB5NNe5EIdf3PHHj0!/b&bo=*QL8Av0C*AIDKQw!&rf=viewer_4)
 
 ## Summary
 
@@ -157,7 +157,7 @@ Paper : [Very Deep Convolutional Networks for Large-Scale Image Recognition](htt
 
 ​	Here is a basic structure of the original Inception :
 
-![](https://static.oschina.net/uploads/space/2018/0317/141510_fIWh_876354.png)
+![](http://m.qpic.cn/psc?/V50VqFfH2A6OlZ2gWBDL0uxzNK4WmFgm/TmEUgtj9EK6.7V8ajmQrEHHclP6H8H1Nt.4ouaeFq6KRMrq2H.h4Dt5p8Jiw8CVkK8qwlT7ldv9rNne8y*mkxUjRmEIro6RF6v2NcHk7Y9Q!/b&bo=LQILAS0CCwEDGTw!&rf=viewer_4)
 
 ​	The structure stacks common convolution (1 x 1, 3 x 3, 5 x 5) and pooling (3 x 3) in CNN. On the one hand, it increases the width of the network, on the other hand, it also increases the adaptability of the network to scale. Above these layers, a ReLU operation must be done after each convolution layer to increase the nonlinear characteristics of the network.
 
@@ -179,11 +179,11 @@ Paper : [Very Deep Convolutional Networks for Large-Scale Image Recognition](htt
 
 ​	Imagine such a structure, the input size is 28 × 28 × 192, and the output size is 28 × 28 × 32. Through the 5 × 5 convolution in the Inception, the number of times of multiplication is calculated as follow : 28 × 28 × 32 feature points are output, so a total of 28 × 28 × 32 convolution calculations are needed. Each convolution calculation requires 5 × 5 × 192 times of multiplication. Therefore, a total of 28 × 28 × 32 × 5 × 5 × 192 ~ 120 million multiplication calculations are needed.
 
-![](https://cdn.jsdelivr.net/gh/mao-jy/mao-jy.github.io/2020/06/28/GoogLeNet/computational_cost_20200628.png)
+![](http://m.qpic.cn/psc?/V50VqFfH2A6OlZ2gWBDL0uxzNK4WmFgm/TmEUgtj9EK6.7V8ajmQrEDvDUL2tZkP.hRHuAePjsT7JCOrB7XWCxorNSam8lBibsZhTiK1rTREbytwoOnWj.3ILmM3UpzU4Bpg*cW48wVU!/b&bo=eQIuAXkCLgEDGTw!&rf=viewer_4)
 
 ​	Only one convolution requires hundreds of millions of multiplications. Even today, the amount of computation is still unacceptable. In order to solve this problem, it is necessary to reduce the dimension of input and then convolute. In the above example, a 1 × 1 convolution is added, as shown in the following figure. A total of 28 × 28 × 16 × 1 × 1 × 192 + 28 × 28 × 32 × 5 × 5 × 16 ~ 12 million times of multiplication calculation are needed, which greatly reduces the amount of calculation.
 
-![](https://cdn.jsdelivr.net/gh/mao-jy/mao-jy.github.io/2020/06/28/GoogLeNet/computational_cost_with_dimensionality_reduction_20200628.png)
+![](http://m.qpic.cn/psc?/V50VqFfH2A6OlZ2gWBDL0uxzNK4WmFgm/TmEUgtj9EK6.7V8ajmQrEP4s3sCbFYKP3EBETBvnixwoilkYE*94*P698jxlWQVw6K8i.PylsMYsXFKrbjFpRSHAIk*5ujEcdp7AEg1c8ms!/b&bo=OgP1ADoD9QADGTw!&rf=viewer_4)
 
 ​	Using the above method to optimize the Inception structure, a 1 × 1 convolution is added before the 3 × 3 and 5 × 5 convolutions, and a 1 × 1 convolution is added after the max pooling layer. For the same size of receptive field, adding more convolutions can get more abundant features, which is another advantage of 1 × 1 convolution besides dimension reduction. The 1 × 1 convolution is after the maximum pooling layer, not before, because the pooling layer is to extract the original features of the image, once it is connected after the 1 × 1 convolution, it will lose its original intention.
 
@@ -196,7 +196,7 @@ Some thinking : If the feature map is reduced from high dimension to low dimensi
 
 #### Inception V1
 
-![](https://static.oschina.net/uploads/space/2018/0317/141520_31TH_876354.png)
+![](http://m.qpic.cn/psc?/V50VqFfH2A6OlZ2gWBDL0uxzNK4WmFgm/TmEUgtj9EK6.7V8ajmQrEIhgf*hz91dHNEPe4URzcXPTqA1goZF1gDgIc4FydjMtkX4PeqVFrAiVIt8znVuwS5rTzuRfGmQJKKdcC6ErUWc!/b&bo=LQImAS0CJgEDGTw!&rf=viewer_4)
 
 ### GoogLeNet
 
@@ -212,9 +212,9 @@ Some thinking : If the feature map is reduced from high dimension to low dimensi
 - The three softmax functions are set to prevent gradient vanishing. 
   - In the training process, three losses are calculated and given different weights, and then added. In the paper, the loss of the first two auxiliary classifiers is given a weight of 0.3; in the prediction process, the first two auxiliary classifiers are removed.
 
-![](https://cdn.jsdelivr.net/gh/mao-jy/mao-jy.github.io/2020/06/28/GoogLeNet/GoogLeNet_20200628.png)
+![](http://m.qpic.cn/psc?/V50VqFfH2A6OlZ2gWBDL0uxzNK4WmFgm/TmEUgtj9EK6.7V8ajmQrEEyLCDB1LRzNPSAy*EWs9gBoJlmz1dNZDAIxd3p7SOpXD7XzRT9AqNLmSAZsKMNEQIiiowZlyImhWN1YwSCkzlI!/b&bo=gAImC38Dlw8DOVc!&rf=viewer_4)
 
-![](https://cdn.jsdelivr.net/gh/mao-jy/mao-jy.github.io/2020/06/28/GoogLeNet/GoogLeNet_parameter_20200628.png)
+![](http://m.qpic.cn/psc?/V50VqFfH2A6OlZ2gWBDL0uxzNK4WmFgm/TmEUgtj9EK6.7V8ajmQrELaYayWw*5s6J*BY0L.J*S5OiwhnctxyADYRlUtqTbZm3prSn0MELG7yVcGb5DfGCcI7xEap5bcGImOf10LWahA!/b&bo=4wOAAuMDgAIDKQw!&rf=viewer_4)
 
 
 # ResNet
@@ -229,13 +229,13 @@ Some thinking : If the feature map is reduced from high dimension to low dimensi
 
 ​	The following figure shows the results of 20 layer and 56 layer convolutional neural network training on CIFAR-10. No matter in training set or test set, the performance of deeper 56 layer is worse than that of 20 layer, which is called network degradation. ResNet is mainly proposed to solve this problem.
 
-![](https://cdn.jsdelivr.net/gh/mao-jy/mao-jy.github.io/2020/07/03/ResNet/Network_Degradation.png)
+![](http://m.qpic.cn/psc?/V50VqFfH2A6OlZ2gWBDL0uxzNK4WmFgm/TmEUgtj9EK6.7V8ajmQrEOIla6xVLqieXElP.j5Hn*B.Zu97HNBHoGfnMzh53Os3cuBQa62Um9tjBJVDUVlJQRpZdakCTjVGNw.Lv7O9KVY!/b&bo=HAMLARwDCwEDGTw!&rf=viewer_4)
 
 ## Shortcut Connection
 
 ​	As illustrated above, the effect of 56 layers is not as good as that of 20 layers, which shows that the extra 36 layers can not carry out identity transformation (that is, the stack of multiple nonlinear transformations cannot be approximate to identity transformation). Therefore, we need to provide the possibility of identity transformation to prevent network degradation.
 
-![](https://cdn.jsdelivr.net/gh/mao-jy/mao-jy.github.io/2020/07/03/ResNet/Shortcut_Connection.png)
+![](http://m.qpic.cn/psc?/V50VqFfH2A6OlZ2gWBDL0uxzNK4WmFgm/TmEUgtj9EK6.7V8ajmQrEOnP4X0Zbgy7c*55iLsf0DIpLKsZE0gOC1ya5fYwYY3OgLC.*G5zBrIJfQ8K95FXnLZ6QvNpSOXvSmFGgw*nHCo!/b&bo=kAHfAJAB3wADGTw!&rf=viewer_4)
 
 ​	We find that, assuming that the layer is redundant, before introducing ResNet, we want the parameters learned by this layer to satisfy L(x) = x, that is, the input is X, and after passing through the redundant layer, the output is still X. But we can see that it is difficult to learn the parameters of this layer for identity mapping. ResNet wants to avoid learning the parameters of identity mapping in this layer. It uses the structure shown in the figure above, let L (x) = F(x) + x; here, F(x) is called residual term. We find that if we want the redundant layer to be able to identity mapping, we only need to learn F(x) = 0. Learning F(x) = 0 is simpler than learning L(x) = x, because the initialization of parameters in each layer of the network is generally biased to 0. In this way, compared with updating the parameters of the network layer to learn L(x) = x, the redundant layer can converge faster by learning the update parameters of F(x) = 0.
 
@@ -247,20 +247,20 @@ Some thinking : If the feature map is reduced from high dimension to low dimensi
 
 ​	Based on the above ideas, the author gave two kinds of residual block design, as shown in the figure below. ResNet18 and ResNet34 use the structure on the left of the figure below. Nowadays, ResNet50 and ResNet101, which are commonly used for feature extraction, use the structure on the right of the figure below. Among them, 1 × 1 convolution is mainly used to reduce and increase dimension, so as to reduce the amount of calculation. Because the number of channels in the middle is less than that on both sides, this structure is called "bottleneck" structure.
 
-![](https://cdn.jsdelivr.net/gh/mao-jy/mao-jy.github.io/2020/07/03/ResNet/Residual_Block.png)
+![](http://m.qpic.cn/psc?/V50VqFfH2A6OlZ2gWBDL0uxzNK4WmFgm/TmEUgtj9EK6.7V8ajmQrED9KjcBvcJy831T9yZYjTVmcj2CbUrBjuKukTa6MxK9mHizyMcfJdoTx0G6oSjt6LlqKtM7DfO5i9Z5rpHiUp9Q!/b&bo=vAIWAbwCFgEDGTw!&rf=viewer_4)
 
 ### ResNet
 
-![](https://cdn.jsdelivr.net/gh/mao-jy/mao-jy.github.io/2020/07/03/ResNet/ResNet.png)
+![](http://m.qpic.cn/psc?/V50VqFfH2A6OlZ2gWBDL0uxzNK4WmFgm/TmEUgtj9EK6.7V8ajmQrEIIxgEeX3ur2K0Xv0Eo6rMBL9ZNriToTWDF9Hm9S73.5pFm6ul1I*apROqiOel7QPyb6jZDCMP8QP6roanvocN0!/b&bo=mQOJAZkDiQEDKQw!&rf=viewer_4)
 
 ### ResNet50
 
-![](https://cdn.jsdelivr.net/gh/mao-jy/mao-jy.github.io/2020/07/03/ResNet/ResNet50.png)
+![](http://m.qpic.cn/psc?/V50VqFfH2A6OlZ2gWBDL0uxzNK4WmFgm/TmEUgtj9EK6.7V8ajmQrEFlM*.k9x5p*i2a2nn3qR8q9MUbRb1L8wOC1Hy0VTqW6A.A61TzwKRrwxLM7TtF4EHHuqyuY1B1HGAl0w1P4W7o!/b&bo=vQYPAb0GDwEDGTw!&rf=viewer_4)
 
 ### Residual Block
 
 ​	ResNet has two residual blocks, one is identity block, the dimension of input and output is the same, so multiple blocks can be connected in series; the other residual block is conv block, the dimension of input and output is different, so it can not be connected in series. Its function is to change the dimension of feature vector.
 
-![](https://cdn.jsdelivr.net/gh/mao-jy/mao-jy.github.io/2020/07/03/ResNet/identity_block.png)
+![](http://m.qpic.cn/psc?/V50VqFfH2A6OlZ2gWBDL0uxzNK4WmFgm/TmEUgtj9EK6.7V8ajmQrEPbKNK5f.0TCgIELronkMg1CtRlwtaPKxmXVbQiYW42GePWCu0JLPNwSeZpxcanNYqdsKjtoT.J0lLeYJyX4Fno!/b&bo=JQU3ASUFNwEDGTw!&rf=viewer_4)
 
-![](https://cdn.jsdelivr.net/gh/mao-jy/mao-jy.github.io/2020/07/03/ResNet/conv_block.png)
+![](http://m.qpic.cn/psc?/V50VqFfH2A6OlZ2gWBDL0uxzNK4WmFgm/TmEUgtj9EK6.7V8ajmQrELSIT2SAtdueKVHcOL8FXN1CbItZWEsR*ybGB3RKbuvfyGS0Q3p3dvx6mq78U.OGGjq*lbWqj9*k7pvHt6VGpsA!/b&bo=FQU.ARUFPgEDGTw!&rf=viewer_4)
