@@ -1,4 +1,4 @@
-# Lasso回归、Ridge回归、和ElasticNet回归
+# Lasso回归、Ridge回归、ElasticNet回归
 
 在处理较为复杂的数据的回归问题时，普通的[线性回归算法](https://www.biaodianfu.com/linear-regression.html)通常会出现预测精度不够，**如果模型中的特征之间有相关关系，就会增加模型的复杂程度**。当数据集中的特征之间有较强的线性相关性时，即特征之间出现严重的多重共线性时，**用普通最小二乘法估计模型参数，往往参数估计的方差太大**，此时，求解出来的模型就很不稳定。在具体取值上与真值有较大的偏差，有时会出现与实际意义不符的正负号。
 
@@ -36,11 +36,11 @@ J(\theta)=\frac{1}{2}\sum_{i}^{m}(y^{(i)}-\theta ^Tx^{(i)})^2+\lambda \sum_{j}^{
 $$
 **Ridge：使用L2-norm正则**
 $$
-J(\theta)=\frac{1}{2}\sum_{i}^{m}(y^{(i)}-\theta ^Tx^{(i)})^2+\lambda \sum_{j}^{n}\theta_j^2
+J(\theta)=\frac{1}{2}\sum_{i}^{m}(y^{(i)}-\theta ^Tx^{(i)})^2+\lambda \sum_{j}^{n}\theta_j^2
 $$
 **ElasticNet：结合L1-norm、L2-norm进行正则**
 $$
-J(\theta)=\frac{1}{2}\sum_{i}^{m}(y^{(i)}-\theta ^Tx^{(i)})^2+\lambda (\rho\sum_{j}^{n}|\theta_j|+(1-\rho)\sum_{j}^{n}\theta_j^2)
+J(\theta)=\frac{1}{2}\sum_{i}^{m}(y^{(i)}-\theta ^Tx^{(i)})^2+\lambda (\rho\sum_{j}^{n}|\theta_j|+(1-\rho)\sum_{j}^{n}\theta_j^2)
 $$
 简单的理解正则化：
 
