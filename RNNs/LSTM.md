@@ -48,13 +48,11 @@ LSTM的主要思想是采用一个叫做“**细胞状态(state)**”的通道�
 
 通过精心设计“门”的结构来去除或增加信息到细胞状态的能力。门是一种让信息选择式通过的方法。它们包含一个 sigmoid 神经网络层和一个逐元乘法操作。
 
-![img](https://www.biaodianfu.com/wp-content/uploads/2020/10/lstm-6.jpg)
-
-Sigmoid层输出0~1之间的值，每个值表示对应的部分信息是否应该通过。0值表示不允许信息通过，1值表示让所有信息通过。一个LSTM有3个这种门，来保护和控制元胞状态。
+Sigmoid层输出0~1之间的值，每个值表示对应的部分信息是否应该通过。0值表示不允许信息通过，1值表示让所有信息通过。一个LSTM有3个这种门，来保护和控制细胞状态。
 
 ### 遗忘门
 
-“遗忘门”决定之前状态中的信息有多少应该舍弃。它会读取 ht−1 和 xt的内容,σ符号代表Sigmoid函数，它会输出一个0到1之间的值。其中0代表舍弃之前细胞状态Ct−1中的内容，1代表完全保留之前细胞状态Ct−1中的内容。0、1之间的值代表部分保留之前细胞状态Ct−1中的内容。
+“遗忘门”决定之前状态中的信息有多少应该舍弃。它会读取 ht−1 和 xt 的内容, σ符号代表Sigmoid函数，它会输出一个0到1之间的值。其中0代表舍弃之前细胞状态Ct−1中的内容，1代表完全保留之前细胞状态Ct−1中的内容。0、1之间的值代表部分保留之前细胞状态Ct−1中的内容。
 
 ![img](https://www.biaodianfu.com/wp-content/uploads/2020/10/lstm-7.png)
 
@@ -82,67 +80,45 @@ Sigmoid层输出0~1之间的值，每个值表示对应的部分信息是否应�
 
 ## 使用LSTM对IMDB评论进行情感分析
 
-**from** keras.datasets **import** imdb
-
-**from** *keras.layers* **import** LSTM, Dense, Embedding
-
-**from** *keras.models* **import** Sequential
-
-**from** *keras.preprocessing* **import** sequence
+```python
+from keras.datasets import imdb
+from keras.layers import LSTM, Dense, Embedding
+from keras.models import Sequential
+from keras.preprocessing import sequence
 
 max_features = 20000
 
-\# cut texts after this number of words (among top max_features most common words)
-
+# cut texts after this number of words (among top max_features most common words)
 maxlen = 80
-
 batch_size = 32
 
 print("Loading data...")
-
 (x_train, y_train), (x_test, y_test) = imdb.load_data(num_words=max_features)
-
 print(len(x_train), "train sequences")
-
 print(len(x_test), "test sequences")
 
 print("Pad sequences (samples x time)")
-
 x_train = sequence.pad_sequences(x_train, maxlen=maxlen)
-
 x_test = sequence.pad_sequences(x_test, maxlen=maxlen)
-
 print("x_train shape:", x_train.shape)
-
 print("x_test shape:", x_test.shape)
 
 print("Build model...")
-
 model = Sequential()
-
 model.add(Embedding(max_features, 128))
-
 model.add(LSTM(128, dropout=0.2, recurrent_dropout=0.2))
-
 model.add(Dense(1, activation="sigmoid"))
 
-\# try using different optimizers and different optimizer configs
-
+# try using different optimizers and different optimizer configs
 model.compile(loss="binary_crossentropy", optimizer="adam", metrics=["accuracy"])
 
 print("Train...")
-
-model.fit(
-
-​    x_train, y_train, batch_size=batch_size, epochs=15, validation_data=(x_test, y_test)
-
-)
+model.fit(x_train, y_train, batch_size=batch_size, epochs=15, validation_data=(x_test, y_test))
 
 score, acc = model.evaluate(x_test, y_test, batch_size=batch_size)
-
 print("Test score:", score)
-
 print("Test accuracy:", acc)
+```
 
 参考链接：
 
