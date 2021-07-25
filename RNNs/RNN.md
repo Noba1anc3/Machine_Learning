@@ -20,7 +20,7 @@
 
 | 类别   | 特点描述                                                     |
 | ------ | ------------------------------------------------------------ |
-| 相同点 | 1、 传统神经网络的扩展。2、 前向计算产生结果，反向计算模型更新。3、 每层神经网络横向可以多个神经元共存,纵向可以有多层神经网络连接。 |
+| 相同点 | 1、 传统神经网络的扩展2、 前向计算产生结果，反向计算模型更新。3、 每层神经网络横向可以多个神经元共存,纵向可以有多层神经网络连接。 |
 | 不同点 | 1、 CNN空间扩展，神经元与特征卷积；RNN时间扩展，神经元与多个时间输出计算2、 RNN可以用于描述时间上连续状态的输出，有记忆功能，CNN用于静态输出（前一输入跟下一输入是否有关联）3、 CNN 需要固定长度的输入、输出，RNN 的输入可以是不定长的4、 CNN 只有 one-to-one 一种结构，而 RNN 有多种结构 |
 
 ## 循环神经网络RNN应用场景
@@ -37,7 +37,7 @@ RNN已经被在实践中证明对NLP是非常成功的。如词向量表达、�
 
 **语言模型与文本生成(Language Modeling and Generating Text)**
 
-给你一个单词序列，我们需要根据前面的单词预测每一个单词的可能性。语言模型能够一个语句正确的可能性，这是机器翻译的一部分，往往可能性越大，语句越正确。另一种应用便是使用生成模型预测下一个单词的概率，从而生成新的文本根据输出概率的采样。语言模型中，典型的输入是单词序列中每个单词的词向量(如 One-hot vector)，输出时预测的单词序列。当在对网络进行训练时，如果，那么这一步的输出便是下一步的输入。
+给你一个单词序列，我们需要根据前面的单词预测每一个单词的可能性。语言模型能够一个语句正确的可能性，这是机器翻译的一部分，往往可能性越大，语句越正确。另一种应用便是使用生成模型预测下一个单词的概率，从而生成新的文本根据输出概率的采样。语言模型中，典型的输入是单词序列中每个单词的词向量(如 One-hot vector)，输出时预测的单词序列。
 
 **机器翻译(Machine Translation)**
 
@@ -79,7 +79,7 @@ t时刻循环体A的输入包括Xt和从t−1时刻传递来的隐藏状态ht−
 
 RNN 的类型：
 
-- One-to-one: Vanilla Neural Networks。最简单的结构，其实和全连接神经网络并没有什么区别，这一类别算不得是 RNN。
+- One-to-one: Vanilla Neural Networks。最简单的结构，其实和全连接神经网络并没有什么区别，这一类别算不上RNN。
 - One-to-many: Image Captioning, image -> sequence of works。输入不是序列，输出是序列。比如：输入一个图片，输出一句描述图片的话
 - Many-to-one: Sentiment Classification, sequence of words -> sentiment。输入是序列，输出不是序列。比如：输入一句话，判断是正面还是负面情绪
 - Many-to-many: Machine Translation, seq of words -> seq of words。输入和输出都是序列，但两者长度可以不一样。比如机器翻译。
@@ -120,13 +120,13 @@ GRU的结构如下图所示：
 
 ![img](https://www.biaodianfu.com/wp-content/uploads/2020/10/GRU.png)
 
-GRU首先根据当前输入单词向量word vector已经前一个隐藏层的状态hidden state计算出update gate和reset gate。再根据reset gate、当前word vector以及前一个hidden state计算新的记忆单元内容(new memory content)。当reset gate为1的时候，new memory content忽略之前的所有memory content，最终的memory是之前的hidden state与new memory content的结合。
+GRU首先根据当前输入单词向量word vector和前一个隐藏层的状态hidden state计算出update gate和reset gate。再根据reset gate、当前word vector以及前一个hidden state计算新的记忆单元内容(new memory content)。当reset gate为1的时候，new memory content忽略之前的所有memory content，最终的memory是之前的hidden state与new memory content的结合。
 
 ![img](https://www.biaodianfu.com/wp-content/uploads/2020/10/GRU-2.png)
 
 ### LSTM Network 长短期记忆
 
-LSTM与GRU类似，目前非常流行。它与一般的RNN结构本质上并没有什么不同，只是使用了不同的函数去去计算隐藏层的状态。在LSTM中，i结构被称为cells，可以把cells看作是黑盒用以保存当前输入xt之前的保存的状态ht−1，这些cells更加一定的条件决定哪些cell抑制哪些cell兴奋。它们结合前面的状态、当前的记忆与当前的输入。已经证明，该网络结构在对长序列依赖问题中非常有效。LSTM的网络结构如下图所示。
+LSTM与GRU类似，目前非常流行。它与一般的RNN结构本质上并没有什么不同，只是使用了不同的函数去去计算隐藏层的状态。在LSTM中，i结构被称为cells，可以把cells看作是黑盒用以保存当前输入xt之前保存的状态ht−1，这些cells在一定的条件决定哪些cell抑制哪些cell兴奋。它们结合前面的状态、当前的记忆与当前的输入。已经证明，该网络结构在对长序列依赖问题中非常有效。LSTM的网络结构如下图所示。
 
 ![img](https://www.biaodianfu.com/wp-content/uploads/2020/10/LSTM.png)
 
