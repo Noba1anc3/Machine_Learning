@@ -349,17 +349,36 @@ DeepFM的三大优势：
 
 ## NFM(Neural Factorization Machines)
 
-[NFM(Neural Factorization Machines)](https://github.com/hexiangnan/neural_factorization_machine)又是在FM上的一个改进工作，出发点是FM通过隐向量可以对完成一个很好的特征组合工作，并且还解决了稀疏的问题，但是FM对于它对于non-linear和higher-order 特征交叉能力不足，而NFM则是结合了FM和NN来弥补这个不足。
+[NFM(Neural Factorization Machines)](https://github.com/hexiangnan/neural_factorization_machine)又是在FM上的一个改进工作，出发点是FM通过隐向量可以完成一个很好的特征组合工作，并且还解决了稀疏的问题，但是FM对于 non-linear 和 higher-order 特征交叉能力不足，而 NFM则是结合了FM和NN来弥补这个不足。
 
 ![img](https://www.biaodianfu.com/wp-content/uploads/2020/10/nfm.png)
 
 DeepFM 是用 Wide & Deep 框架，在 FM 旁边加了一个 NN，最后一并 sigmoid 输出。NFM 的做法则是利用隐向量逐项相乘得到的向量作为 MLP 的输入，构建的 FM + NN 模型。其中：
 
 - Input Feature Vector层是输入的稀疏向量，可以带权
-- Embedding Layer对输入的稀疏向量look up 成稠密的embedding 向量
-- Bi-Interaction Layer将每个特征embedding进行两两做element-wise product，Bi-Interaction的输出是一个 k维向量（就是隐向量的大小）,这层负责了特征之间second-order组合。fBi(Vx)=∑ni∑nj=i+1xivi⊙xjvj类似FM的式子转换，这里同样可以做如下转换将复杂度降低：fBi(Vx)=12[(∑nixivi)2–∑ni(xivi)2]
-- Hidden Layers这里是多层学习高阶组合特征学习,其实就是一个DNN模块: z1=σ1(W1fBi(Vx)+b1)z2=σ2(W2z1+b2)…zL=σL(WLzL−1+bL)
-- Prediction Score层就是输出最终的结果：yNFM(x)=w0+∑niwixi+hTσL(Wl(…σ1(W1fBi(Vx)+b1))+bL)
+
+- Embedding Layer对输入的稀疏向量 look up 成稠密的 embedding 向量
+
+- Bi-Interaction Layer 将每个特征 embedding 两两做 element-wise product，Bi-Interaction 的输出是一个 k维向量（就是隐向量的大小）, 这层负责了特征之间 second-order 组合。
+  $$
+  f_{\text{Bi}}(V_x) = \sum_i^n \sum_{j=i+1}^n x_iv_i \odot x_jv_j
+  $$
+  类似FM的式子转换，这里同样可以做如下转换将复杂度降低：
+  $$
+  f_{\text{Bi}}(V_x) = \frac{1}{2} \left [ (\sum_i^n x_iv_i)^2 - \sum_i^n(x_iv_i)^2 \right]
+  $$
+  
+
+- Hidden Layers这里是多层学习高阶组合特征学习,其实就是一个DNN模块: 
+  $$
+  z_1=\sigma_1(W_1 f_{\text{Bi}}(V_x) + b_1) \\ z_2 = \sigma_2(W_2z_1+b_2) \\ … \\ z_L=\sigma_L(W_L z_{L-1}+b_L)
+  $$
+  
+
+- Prediction Score层就是输出最终的结果：
+  $$
+  y_{\text{NFM}}(x) = w_0 + \sum_i^n w_ix_i + h^T \sigma_L(W_l(…\sigma_1(W_1 f_{\text{Bi}}(V_x) + b_1))+b_L)
+  $$
 
 FM可以看做是NFM模型 Hidden Layer层数为0一种特殊形式。最终的实验效果看来NFM也还是可以带来一个不错的效果：
 
@@ -371,31 +390,23 @@ FM可以看做是NFM模型 Hidden Layer层数为0一种特殊形式。最终的�
 
 ![img](https://www.biaodianfu.com/wp-content/uploads/2020/10/afm.png)
 
-从图中可以很清晰的看出,AFM比FM就是多了一层Attention-based Pooling，该层的作用是通过Attention机制生成一个αij权重矩阵，该权重矩阵将会作用到最后的二阶项中，因此这里αij的生成步骤是先通过原始的二阶点积求得各自的组合的一个Score：
-
-
-
-a′i,j=hTReLu(W(vi⊙vj)xixj+b)
-
-
-
-其中W∈Rt×k,b∈Rt,h∈Rt，这里t表示Attention网络的大小。然后对其score进行softmax的归一化：
-
-
-
-ai,j=exp(a′i,j)∑i,jexp(a′i,j)
-
-
-
+从图中可以很清晰的看出, AFM比FM就是多了一层Attention-based Pooling，该层的作用是通过Attention机制生成一个 α{ij} 权重矩阵，该权重矩阵将会作用到最后的二阶项中，因此这里 α{ij} 的生成步骤是先通过原始的二阶点积求得各自的组合的一个Score：
+$$
+{a}’_{i,j} = h^T \text{ReLu}(W(v_i \odot v_j)x_ix_j+b)
+$$
+其中，
+$$
+W \in \mathbb{R}^{t \times k},b \in \mathbb{R}^t , h \in \mathbb{R}^t
+$$
+这里t表示Attention网络的大小。然后对其score进行softmax的归一化：
+$$
+a_{i,j} = \frac{exp({a}’_{i,j})}{\sum_{i,j} exp({a}’_{i,j})}
+$$
 最后该权重矩阵再次用于二阶项的计算（也就是最终的AFM式子）：
-
-
-
-y^=f(x⃗ )=w0+∑i=1nwixi+∑0<i<j<=nαij⟨p⃗ ,(v⃗ i⊙v⃗ j)⟩xixj.
-
-
-
-这里，αij是通过注意力机制学习得到的特征i和特征j组合的权重，p⃗ 是对隐向量每个维度学习得到的权重， v⃗ i⊙v⃗ j表示向量v⃗ i和v⃗ j逐项相乘得到的新向量。显然，当αij≡1且p⃗ =1⃗ 时，AFM 退化为标准的 FM 模型。
+$$
+\hat y = f(\vec x) = w_0 + \sum_{i = 1}^{n}w_ix_i + \sum_{0<i<j<=n}α_{ij}<\vec p,( \vec v_i \odot \vec v_j)>x_ix_j
+$$
+这里，α{ij}是通过注意力机制学习得到的特征i和特征j组合的权重，p是对隐向量每个维度学习得到的权重， vi⊙vj表示向量 vi 和 vj 逐项相乘得到的新向量。显然，当 αij≡1 且 p = 1 时，AFM 退化为标准的 FM 模型。
 
 其实整个算法思路也是很简单，但是在实验上却有一个不错的效果：
 
