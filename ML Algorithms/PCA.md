@@ -261,7 +261,7 @@ $$
 import numpy as np
 
 # X: 需要降维的原始数据   topNfeat：需要降到的维数
-def PCA(X, topNfeat=9999999):
+def PCA(X, topNfeat=1):
     # 1.原始数据默认都是每一行为一个样本数据，每一列为一个特征，所以进行转置，让每一列代表一个样本数据
     X = X.T
     
@@ -284,14 +284,21 @@ def PCA(X, topNfeat=9999999):
     # argsort函数返回的是数组值从小到大的索引值,参数中加个-号，变为从大到小
     eigValInd = np.argsort(-eigVals)
     eigValInd = eigValInd[0:topNfeat]  # 取出前topNfeat个最大的特征值所对应的索引
-    redEigVects = eigVects[:,eigValInd]  #redEigVects 即为需要的变换矩阵，即P
+    redEigVects = eigVecs[:,eigValInd]  #redEigVects 即为需要的变换矩阵，即P
     print("变换矩阵：\n", redEigVects)
     
     #6 Y=P^TX即为降维到k维后的数据
-    X_PCA = redEigVects.T * X
+    print(X.shape, redEigVects.shape)
+    X_PCA = np.matmul(X.T, redEigVects)
     return X_PCA
 
-PCA(X, topNfeat = 1)
+X = [[2.5, 2.4], [0.5, 0.7], [2.2, 2.9], [1.9, 2.2],
+    [3.1, 3.0], [2.3, 2.7], [2, 1.6], [1, 1.1],
+    [1.5, 1.6], [1.1, 0.9]]
+
+X = np.array(X)
+
+print(PCA(X, topNfeat = 1))
 ```
 
 ## PCA算法总结
